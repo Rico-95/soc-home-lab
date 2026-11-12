@@ -32,10 +32,10 @@ Built in VirtualBox 7 on a Windows 11 laptop (Ryzen 5, 24 GB RAM).
 | 02 | [Vulnerability management](02-vulnerability-management/) | Nessus, CVSS, patching, verification | 24 critical and 47 high reduced to 0 critical and 0 high |
 | 03 | [Malware detection (EICAR)](03-malware-detection-eicar/) | Microsoft Defender, event logs, triage | Detected and quarantined in 48 seconds; PowerShell origin flagged |
 | 04 | [Email header analysis](04-email-header-analysis/) | SPF, DKIM, DMARC, link analysis | Legitimate verdict; weak DMARC policy identified |
+| 05 | [Brute force and lockout](05-brute-force-lockout/) | Windows event logs, Kerberos, PowerShell, MITRE T1110 | 5 failures in 32 s traced across client and DC to one machine and account |
 
 ## Roadmap
 
-- Brute-force and account lockout investigation (Event IDs 4625 and 4740, MITRE T1110)
 - Phishing true-positive analysis (MITRE T1566)
 - Wazuh SIEM with agents on both hosts
 - Sysmon process logging (MITRE T1059.001)

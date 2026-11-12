@@ -21,3 +21,8 @@ Before saving each one, check:
 | 03-malware-detection-eicar/screenshots | `12-event-1116.png` | Event Viewer, Event 1116 |
 | 03-malware-detection-eicar/screenshots | `12-event-1117.png` | Event Viewer, Event 1117 |
 | 04-email-header-analysis/screenshots | `13-header-summary.png` | Gmail "Show original" summary (SPF/DKIM/DMARC). Blur the To: address |
+| 05-brute-force-lockout/screenshots | `14-lockout-policy.png` | `Get-ADDefaultDomainPasswordPolicy` output |
+| 05-brute-force-lockout/screenshots | `15-account-locked.png` | `Get-ADUser j.smith` showing LockedOut True |
+| 05-brute-force-lockout/screenshots | `16-event-4740.png` | Event Viewer on DC01, Event 4740 |
+| 05-brute-force-lockout/screenshots | `17-client-4625-table.png` | The 4625 PowerShell table on CLIENT01 |
+| 05-brute-force-lockout/screenshots | `18-dc-4771-table.png` | The 4771 PowerShell table on DC01 |
