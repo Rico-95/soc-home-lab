@@ -72,7 +72,15 @@ Next steps: 1. Check for a successful logon (4624) for j.smith after the failure
             3. Unlock only after the user is verified.
 Escalate?:  Yes, if the user denies it, if a success follows the failures, if other
             accounts show failures from the same source, or if it happens out of hours.
-Verdict:    Controlled lab test — account unlocked (Unlock-ADAccount j.smith).
+Follow-up:  A successful logon (4624) for j.smith followed at 21:44:09, after the
+            account was unlocked. Confirmed with the user as their own sign-in.
+Verdict:    Controlled lab test — account unlocked (Unlock-ADAccount j.smith),
+            success verified as legitimate. Closed.
+```
+
+The success check was run with:
+```powershell
+Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4624; StartTime=(Get-Date).AddHours(-3)} | Where-Object { $_.Message -match 'j\.smith' } | Select-Object -First 3 TimeCreated
 ```
 
 ## What I learned
