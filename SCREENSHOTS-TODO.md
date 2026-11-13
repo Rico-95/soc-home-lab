@@ -26,3 +26,5 @@ Before saving each one, check:
 | 05-brute-force-lockout/screenshots | `16-event-4740.png` | Event Viewer on DC01, Event 4740 |
 | 05-brute-force-lockout/screenshots | `17-client-4625-table.png` | The 4625 PowerShell table on CLIENT01 |
 | 05-brute-force-lockout/screenshots | `18-dc-4771-table.png` | The 4771 PowerShell table on DC01 |
+| 06-phishing-analysis/screenshots | `19-phishing-headers.png` | The raw headers (From, Reply-To, Return-Path, Authentication-Results) in the browser |
+| 06-phishing-analysis/screenshots | `20-phishing-mailto.png` | The mailto "Report the user" section of the raw email |
