@@ -26,6 +26,7 @@ Three different domains are involved (From, Reply-To, Return-Path), and none of 
 
 | Element | Finding |
 | --- | --- |
+| Fake sign-in details | "Country/region: Russia/Moscow", "IP address: 103.225.77[.]255", "Windows 10", "Firefox": invented to make the alert look specific and alarming |
 | "Report the user" button | A `mailto:` link to the attacker's Gmail address, with the subject "unusual signin activity" and body "Report The User" already filled in |
 | Tracking pixel | `hxxp://thebandalisty[.]com/track/…`, a hidden image that tells the attacker when the email is opened |
 | Login link | None |
