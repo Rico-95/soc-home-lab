@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-11-14T20:28:42.665+0000",
+  "agent": {
+    "ip": "192.168.56.102",
+    "name": "CLIENT01",
+    "id": "002"
+  },
+  "rule": {
+    "id": "92057",
+    "level": 12,
+    "description": "Powershell.exe spawned a powershell process which executed a base64 encoded command",
+    "mitre": {
+      "technique": [
+        "PowerShell"
+      ],
+      "id": [
+        "T1059.001"
+      ],
+      "tactic": [
+        "Execution"
+      ]
+    },
+    "groups": [
+      "sysmon",
+      "sysmon_eid1_detections",
+      "windows"
+    ]
+  },
+  "sysmon": {
+    "eventID": "1",
+    "channel": "Microsoft-Windows-Sysmon/Operational",
+    "computer": "CLIENT01.lab.local",
+    "user": "LAB\\\\j.smith",
+    "integrityLevel": "Medium",
+    "logonId": "0x84246c",
+    "parentImage": "C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+    "parentProcessId": "4060",
+    "image": "C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+    "processId": "8160",
+    "commandLine": "\\\"C:\\\\WINDOWS\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\\\" -EncodedCommand VwByAGkAdABlAC0ATwB1AHQAcAB1AHQAIAAiAGwAYQBiACAAdABlAHMAdAA6ACAAZQBuAGMAbwBkAGUAZAAgAGMAbwBtAG0AYQBuAGQAIgA=",
+    "hashes": "MD5=A1DA1A7056D53AC10F8163B04FE66DFB,SHA256=D8F182560210D43BAAF767D482AD1DC1207372522E91413B9D5E515A875E552D,IMPHASH=D13BDC01ABFF6F56AD7B49B3F47C0DE2"
+  }
+}

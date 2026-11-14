@@ -1,0 +1,16 @@
+<!--
+  Custom Wazuh rule: alert when whoami.exe runs on a Windows endpoint.
+  Wazuh's default ruleset records Sysmon process creation (Event 1) at level 0 and has
+  no rule for whoami, so this common attacker discovery command never reached the dashboard.
+  Add to /var/ossec/etc/rules/local_rules.xml on the manager, then restart the manager.
+-->
+<group name="local,sysmon,discovery,">
+  <rule id="100100" level="6">
+    <if_group>sysmon_event1</if_group>
+    <field name="win.eventdata.originalFileName" type="pcre2">(?i)^whoami\.exe$</field>
+    <description>Discovery: whoami executed by $(win.eventdata.user) on $(win.system.computer)</description>
+    <mitre>
+      <id>T1033</id>
+    </mitre>
+  </rule>
+</group>
