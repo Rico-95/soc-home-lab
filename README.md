@@ -1,6 +1,6 @@
 # SOC Home Lab
 
-A hands-on security operations lab built and documented by **Richard Owolabi**: Active Directory, vulnerability management, endpoint detection, log investigation, phishing analysis, SIEM detection, detection engineering and service desk ticketing with SLAs, each written up the way a SOC analyst would record it.
+A hands-on security operations lab built and documented by **Richard Owolabi**: Active Directory, vulnerability management, endpoint detection, log investigation, phishing analysis, SIEM detection, detection engineering, service desk ticketing with SLAs and Microsoft 365 identity security, each written up the way a SOC analyst would record it.
 
 CompTIA Security+ · ISC2 Certified in Cybersecurity · CompTIA CySA+ exam booked for January 2027
 
@@ -39,9 +39,11 @@ Built in VirtualBox 7 on a Windows 11 laptop (Ryzen 5, 24 GB RAM).
 | 07 | [SIEM detection with Wazuh](07-siem-wazuh/) | Wazuh, agent deployment, alert triage, detection tuning, MITRE ATT&CK | Brute force and malware alerts raised; lockout-before-correlation gap identified |
 | 08 | [Sysmon and a custom detection rule](08-sysmon-detection/) | Sysmon, process analysis, base64 decoding, Wazuh rule writing | Attack chain caught (T1087, T1059.001); custom rule 100100 written to detect whoami |
 | 09 | [Ticketing, SLAs and automation](09-ticketing-sla/) | Jira Service Management, ITIL incident and problem management, SLAs, Python and REST API | 4 tickets worked end to end, 3 of 3 SLAs met; Wazuh alert turned into a ticket by script; containment tested |
+| 10 | [Microsoft 365, Entra ID and MFA](10-m365-entra-mfa/) | Microsoft 365 admin, Entra ID, Conditional Access, sign-in log analysis | Password-only sign-in found; MFA policy rolled out via report-only, which caught a misconfiguration |
 
 ## Roadmap
 
+- Intune device enrolment and policy (lab 10, part 2)
 - Microsoft Sentinel and KQL
 - Packet capture analysis in Wireshark
 
