@@ -1,8 +1,8 @@
-# 10 · Microsoft 365, Entra ID and MFA with Conditional Access
+# 10 · Microsoft 365, Entra ID, MFA and Intune
 
-**Goal:** run the identity side of a Microsoft 365 organisation the way a deskside or service desk engineer does (create accounts, assign licences, reset passwords), then make sure every user is protected by multi-factor authentication (MFA) and prove it from the sign-in logs.
+**Goal:** run a Microsoft 365 organisation the way a deskside or service desk engineer does: create accounts, assign licences and reset passwords; make sure every user is protected by multi-factor authentication (MFA) and prove it from the sign-in logs; then enrol a Windows device in Intune, push a policy to it and check its compliance.
 
-**Result:** a Microsoft 365 Business Premium tenant with separate admin and user accounts. I found that a new user could sign in **with a password alone**. I wrote a Conditional Access policy to require MFA, and **rolling it out in report-only mode first caught a configuration mistake that would have left it enforcing nothing.** After the fix, the sign-in logs show my policy enforcing MFA. Part 2 (Intune device management) is next.
+**Result:** a Microsoft 365 Business Premium tenant with separate admin and user accounts. I found that a new user could sign in **with a password alone**. I wrote a Conditional Access policy to require MFA, and **rolling it out in report-only mode first caught a configuration mistake that would have left it enforcing nothing.** After the fix, the sign-in logs show my policy enforcing MFA. **Part 2:** a new Windows 11 machine joined to Entra ID and enrolled in Intune with one sign-in, received a security banner policy, and was checked against a compliance policy, which flagged it **Noncompliant** within minutes when I switched off antivirus real-time protection.
 
 ## Setup
 - **Microsoft 365 Business Premium** (30-day trial), tenant `RicosLab.onmicrosoft.com`. Business Premium includes **Entra ID P1**, which is what enables Conditional Access.
@@ -58,6 +58,38 @@ One sign-in creates several log entries, and not all of them prove MFA was used:
 
 To get a true test I closed every private browser window before signing in again, so no saved session could carry an earlier MFA result.
 
+## Part 2: Intune device management
+
+### Enrolment: one sign-in joins and enrols the device
+- **Automatic enrolment** turned on in Entra ID: Mobility → Microsoft Intune → **MDM user scope: All**.
+- A new **Windows 11 Enterprise** virtual machine (Home edition can't join Entra ID), on its own NAT network: it needs the internet, not my on-premises lab domain.
+- During Windows setup I chose **"Set up for work or school"** and signed in as j.smith, completing MFA (my CA001 policy applies to device sign-in too). That single sign-in **joined the device to Entra ID and enrolled it in Intune**.
+- Verified on the device with `dsregcmd /status`: **AzureAdJoined : YES**, DomainJoined : NO (cloud-only, no on-premises domain).
+- In Intune the device appeared as **managed by Intune, corporate-owned, primary user j.smith**.
+
+### A policy I could see working: the sign-in security banner
+Configuration profile **CFG001 – Logon security banner** (Settings catalog → Local Policies Security Options), assigned to all devices:
+- Title: *Ricos Lab - Authorised use only*
+- Text: *This system is for authorised users. Activity may be monitored and recorded*
+
+The device reported the profile as **Succeeded**, and after a restart the banner appeared before the sign-in screen. A legal notice like this is standard on corporate devices: it tells users the system is monitored before they sign in.
+
+### Finding: a device with no compliance policy counted as "Compliant"
+Before I had created any compliance policy, Intune listed the device as **Compliant**. That comes from a tenant-wide default: **devices with no compliance policy assigned are marked Compliant.** If a Conditional Access rule later allowed "compliant devices only", an enrolled device that no policy checked would still pass. I changed the setting to **Not compliant**, so a device has to meet a real policy to count.
+
+### Compliance policy CMP001 – Baseline Security
+Windows 10 and later, assigned to all devices, devices marked noncompliant immediately on failure:
+- **System security:** firewall, antivirus, antispyware, Microsoft Defender Antimalware and real-time protection all required
+- **Device properties:** minimum OS version 10.0.22631
+
+| Time (17 Nov) | Device state | What happened |
+| --- | --- | --- |
+| 23:27 | n/a | CMP001 created |
+| 23:34 | **Compliant** | Device synced and met every requirement |
+| 23:41 | **Noncompliant** | I turned off Defender real-time protection and synced |
+
+Real-time protection was then switched back on. This is the everyday deskside ticket "why is my laptop showing non-compliant?": the answer is in the device's compliance report, and the fix is the setting it names, followed by a sync.
+
 ## Security notes
 - **The MFA setup QR code is never published.** It contains the secret that generates the user's codes; anyone with a screenshot of it could generate valid codes for that account.
 - **Break-glass account:** in production, one emergency admin account would be excluded from Conditional Access and monitored closely, so a misconfigured policy can't lock every administrator out. Not built in this lab; my admin account had MFA registered before any policy was enforced.
@@ -67,6 +99,7 @@ To get a true test I closed every private browser window before signing in again
 - **Report-only first, every time.** A policy can be On and still apply to nothing; report-only shows that before it matters.
 - **Sign-in logs need careful reading.** "Multifactor authentication required" doesn't mean a code was entered: check the Authentication Details and the Conditional Access tabs.
 - **Know what is enforcing your controls.** The tenant had protections I didn't create; the logs showed which policy actually did the work.
+- **Defaults can quietly weaken a control.** "No policy = compliant" is a default worth changing on day one.
 
 ## Evidence
 ![Users and licences](screenshots/41-users-licences.png)
@@ -79,3 +112,12 @@ To get a true test I closed every private browser window before signing in again
 ![CA001 report-only success](screenshots/46b-ca001-report-only-success.png)
 ![Conditional Access policies](screenshots/47-ca-policies.png)
 ![CA001 enforced](screenshots/48-ca001-enforced.png)
+![Automatic enrolment scope](screenshots/49-mdm-user-scope.png)
+![Entra ID joined](screenshots/50-dsregcmd-azureadjoined.png)
+![Device in Intune](screenshots/51-intune-device.png)
+![Banner policy settings](screenshots/52-cfg001-settings.png)
+![Banner policy succeeded](screenshots/53-cfg001-succeeded.png)
+![Banner on the device](screenshots/54-logon-banner.png)
+![Compliance settings](screenshots/55-compliance-default.png)
+![Device compliant](screenshots/56-device-compliant.png)
+![Device noncompliant](screenshots/57-device-noncompliant.png)
